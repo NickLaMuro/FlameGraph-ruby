@@ -1,6 +1,12 @@
 module FlameGraph
   class Data
-    LINE_REGEXP = /^(.*)\s+?(\d+(?:\.\d*)?)$/
+    LINE_REGEXP = /
+      \s+                # Space after stack
+      (\d+(?:\.\d*)?)    # First sample size
+      \s?                # Optional differencial whitespace
+      (\d+(?:\.\d*)?)?   # Optional second sample size
+      $                  # End of line
+    /x
 
     attr_reader   :input_io
     attr_reader   :config
@@ -231,18 +237,10 @@ module FlameGraph
     #   3 element array:   differentials (frame, samples1, samples2)
     #
     def parse_line line
-      if line.match LINE_REGEXP
-        stack    = $1
-        samples1 = $2
-        samples2 = nil
-
-        # there may be an extra samples column for differentials
-        if stack =~ LINE_REGEXP
-          samples2 = samples1
-          stack    = $1
-          samples1 = $2
-        end
-
+      if line =~ LINE_REGEXP
+        stack    = $`  # pre-match
+        samples1 = $1  # first match
+        samples2 = $2  # second match
         [stack, samples1, samples2]
       end
     end
