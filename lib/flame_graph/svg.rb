@@ -104,7 +104,7 @@ module FlameGraph
 
       draw_frames!
 
-      self.svg += "</svg>\n"
+      self.svg << "</svg>\n"
     end
 
     def header
@@ -187,29 +187,29 @@ module FlameGraph
     private
 
     def add_header!
-      self.svg += header
+      self.svg << header
     end
 
     def add_script!
-      self.svg += definitions
-      self.svg += style
-      self.svg += script
+      self.svg << definitions
+      self.svg << style
+      self.svg << script
     end
 
     def add_background!
-      self.svg += filled_rectangle 0, 0, width, height, 'url(#background)'
+      self.svg << filled_rectangle(0, 0, width, height, 'url(#background)')
     end
 
     def add_title!
-      self.svg += string_ttf image_center, fontsize * 2, title, "title"
-      self.svg += string_ttf image_center, fontsize * 4, subtitle, "subtitle" unless subtitle.empty?
+      self.svg << string_ttf(image_center, fontsize * 2, title, "title")
+      self.svg << string_ttf(image_center, fontsize * 4, subtitle, "subtitle") unless subtitle.empty?
     end
 
     def add_graph_controls!
-      self.svg += string_ttf xpad, height - (ypad2 / 2), " ", "details"
-      self.svg += string_ttf xpad, fontsize * 2, "Reset Zoom", "unzoom", 'class="hide"'
-      self.svg += string_ttf width - xpad - 100, fontsize * 2, "Search", "search"
-      self.svg += string_ttf width - xpad - 100, " ", "matched"
+      self.svg << string_ttf(xpad, height - (ypad2 / 2), " ", "details")
+      self.svg << string_ttf(xpad, fontsize * 2, "Reset Zoom", "unzoom", 'class="hide"')
+      self.svg << string_ttf(width - xpad - 100, fontsize * 2, "Search", "search")
+      self.svg << string_ttf(width - xpad - 100, " ", "matched")
     end
 
     # Don't try to understand this regexp... because I don't...
@@ -234,7 +234,7 @@ module FlameGraph
     COMMA_ADD_REGEXP = /(^[-+]?\d+?(?=(?>(?:\d{3})+)(?!\d))|\G\d{3}(?=\d))/
 
     def draw_frames!
-      self.svg += group_start "id" => "frames"
+      self.svg << group_start("id" => "frames")
 
       data.each do |func, depth, start_time, etime, delta|
         end_time = (func.empty? and depth == 0) ? data.timemax : etime
@@ -285,13 +285,13 @@ module FlameGraph
         name_attrs = data.nameattr[func]
         node_attrs = { "title" => info }.merge name_attrs
 
-        self.svg += group_start      node_attrs
-        self.svg += filled_rectangle x1, y1, x2, y2, samples_color, 'rx="2" ry="2"'
-        self.svg += string_ttf       x1 + 3, 3 + (y1 + y2) / 2, node_text
-        self.svg += group_end
+        self.svg << (group_start      node_attrs)
+        self.svg << (filled_rectangle x1, y1, x2, y2, samples_color, 'rx="2" ry="2"')
+        self.svg << (string_ttf       x1 + 3, 3 + (y1 + y2) / 2, node_text)
+        self.svg << (group_end)
       end
 
-      self.svg += group_end  # end of 'frames' group
+      self.svg << group_end  # end of 'frames' group
     end
 
     def escape text
