@@ -59,8 +59,8 @@ module FlameGraph
 
     def each
       nodes.each do |id, node|
-        func, depth, etime = id.split(";")
-        yield func, depth.to_i, node[:stime], etime.to_f, node[:delta]
+        #     func,  depth, stime       , etime, delta
+        yield id[0], id[1], node[:stime], id[2], node[:delta]
       end
     end
 
@@ -158,15 +158,15 @@ module FlameGraph
       @widthpertime = (width - 2 * xpad).to_f / timemax
       minwidth_time = minwidth / widthpertime
 
-      each do |func, depth, stime, etime, delta|
-        raise "missing start for #{id}" if stime.nil?
+      nodes.reject! do |id, node|
+        raise "missing start for #{id[0]};#{id[1]};#{id[2]}" if node[:stime].nil?
 
-        if (etime.to_i - stime) < minwidth_time
-          nodes.delete "#{func};#{depth};#{etime}"
-          next
+        if (id[2] - node[:stime]) < minwidth_time
+          true
+        else
+          @depthmax = id[1] if id[1] > @depthmax
+          false
         end
-
-        @depthmax = depth if depth > @depthmax
       end
     end
 
@@ -200,12 +200,13 @@ module FlameGraph
 
       i = len_a
       while i >= len_same
-        key = "#{last[i]};#{i}"
+        key = [ last[i], i ]
         if tmp_data = tmp[key]
-          nodes["#{key};#{time}"] = { :stime => tmp_data.delete(:stime) }
+          node_key         = key + [time]
+          nodes[node_key]  = { :stime => tmp_data[:stime] }
 
           if tmp_data[:delta]
-            nodes["#{key};#{time}"][:delta] = tmp_data.delete(:delta)
+            nodes[node_key][:delta] = tmp_data[:delta]
           end
           tmp.delete(key)
         end
@@ -215,12 +216,12 @@ module FlameGraph
 
       i = len_same
       while i <= len_b
-        key      = "#{this[i]};#{i}"
+        key      = [ this[i], i ]
         tmp[key] = { :stime => time }
 
         if delta
           tmp[key][:delta] ||= 0
-          tmp[key][:delta]  += i == len_b ? delta : 0
+          tmp[key][:delta]  += delta if i == len_b
         end
         i += 1
       end
