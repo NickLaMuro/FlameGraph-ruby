@@ -335,8 +335,10 @@ module FlameGraph
       group
     end
 
+    A_CLOSE = "</a>\n"
+    G_CLOSE = "</g>\n"
     def group_end attr = {}
-      "</#{attr['href'] ? 'a' : 'g'}>\n"
+      attr['href'] ? A_CLOSE : G_CLOSE
     end
 
     def string_ttf x, y, str = " ", id = nil, extra = ""
