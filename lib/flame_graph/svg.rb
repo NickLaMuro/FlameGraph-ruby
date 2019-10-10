@@ -342,10 +342,16 @@ module FlameGraph
     end
 
     def string_ttf x, y, str = " ", id = nil, extra = ""
-      x_val  = "%0.2f" % [x]
-      id_val = id ? %Q{id="#{id}"} : ""
+      # x_val  = "%0.2f" % [x]
+      # id_val = id ? %Q{id="#{id}"} : ""
 
-      %Q{<text #{id_val} x="#{x_val}" y="#{y}" #{extra}>#{str}<\/text>\n}
+      # %Q{<text #{id_val} x="#{x_val}" y="#{y}" #{extra}>#{str}<\/text>\n}
+      # %Q{<text #{"id=\"#{id}\"" if id} x="#{x_val}" y="#{y}" #{extra}>#{str}<\/text>\n}
+
+      text  = "<text "
+      text << %Q{id="#{id}"} if id
+      text << %Q{ x="%0.2f" y="%s" %s>%s<\/text>\n} % [x, y, extra, str]
+
     end
 
     RECT_TMPL = %Q{<rect x="%0.1f" y="%s" width="%0.1f" height="%0.1f" fill="%s" %s />\n}
