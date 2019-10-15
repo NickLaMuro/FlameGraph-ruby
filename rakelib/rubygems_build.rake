@@ -29,4 +29,14 @@ namespace :rubygems do
 
   desc "Repackage, Uninstall and Install"
   task :reinstall => [:repackage, :uninstall, :install]
+
+  task :credentials do
+    write_gem_credentials
+  end
+
+  desc "Push #{FLAMEGRAPH_GEM_NAME} to rubygems.org"
+  task :push => [:credentials, :package] do
+    package = File.join "pkg", FLAMEGRAPH_GEM_NAME
+    gem_run "push", package
+  end
 end
