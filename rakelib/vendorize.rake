@@ -15,4 +15,9 @@ namespace :vendorize do
 
     Vendorize.as_exe
   end
+
+  task :all => [:lib, :exe]
 end
+
+desc 'Create all "vendorized" files'
+task :vendorize => "vendorize:all"
