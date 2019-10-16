@@ -11,7 +11,7 @@ module GitHubAPI
       "tag_name"         => FLAMEGRAPH_VERSION_TAG,
       "name"             => FLAMEGRAPH_VERSION_TAG,
       "body"             => Changelog.release_desc,
-      "draft"            => false,
+      "draft"            => true,
       "prerelease"       => false
     }
 
