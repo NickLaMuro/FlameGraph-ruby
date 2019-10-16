@@ -1,5 +1,8 @@
-require "rubygems/package_task"
-require File.expand_path "constants", File.dirname(__FILE__)
+rakelib = File.expand_path "..", __FILE__
+$LOAD_PATH.unshift(rakelib) unless $LOAD_PATH.include?(rakelib)
+
+require 'rubygems/package_task'
+require 'constants'
 
 namespace :rubygems do
   Gem::PackageTask.new(FLAMEGRAPH_GEMSPEC).define
