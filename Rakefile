@@ -1,3 +1,8 @@
+rakelib = File.expand_path "rakelib", File.dirname(__FILE__)
+$LOAD_PATH.unshift(rakelib) unless $LOAD_PATH.include?(rakelib)
+
+require "support/rake_constants"
+
 # -----------------------------------------------
 #                     Tests
 # -----------------------------------------------
@@ -25,5 +30,15 @@ task :console do
 
   TOPLEVEL_BINDING.irb
 end
+
+# -----------------------------------------------
+#                    Release
+# -----------------------------------------------
+
+desc "Release #{FLAMEGRAPH_GEM_NAME}"
+task :release         => ["git:tag", "git:validate", "github:release"]
+
+desc "Release #{FLAMEGRAPH_GEM_NAME} manually (without Github Actions)"
+task "release:manual" => [:release, "rubygems:push", "github:push"]
 
 task :default => :test
