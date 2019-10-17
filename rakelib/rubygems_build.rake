@@ -3,16 +3,12 @@ $LOAD_PATH.unshift(rakelib) unless $LOAD_PATH.include?(rakelib)
 
 require 'rubygems/package_task'
 require 'support/rake_constants'
+require 'support/rubygems_helper'
+
+include RubygemsHelper
 
 namespace :rubygems do
   Gem::PackageTask.new(FLAMEGRAPH_GEMSPEC).define
-
-  def gem_run *args
-    require "rubygems/gem_runner"
-    require "rubygems/exceptions"
-
-    Gem::GemRunner.new.run args
-  end
 
   desc "Install the build of the gem locally"
   task :install => [:package] do
