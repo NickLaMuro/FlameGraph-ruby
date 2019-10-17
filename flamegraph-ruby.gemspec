@@ -22,16 +22,7 @@ Gem::Specification.new do |spec|
     project using the CDDL License.
   DESC
   spec.homepage      = "https://github.com/NickLaMuro/FlameGraph-ruby"
-  spec.license       = "CDDL"
-
-  # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
-  # to allow pushing to a single host or delete this section to allow pushing to any host.
-  if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against " \
-      "public gem pushes."
-  end
+  spec.license       = "CDDL-1.0"
 
   spec.files         = Dir["bin/*", "lib/**/*"] + %w[README.md LICENSE.txt]
   spec.bindir        = "bin"
