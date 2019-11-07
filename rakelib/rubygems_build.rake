@@ -3,16 +3,12 @@ $LOAD_PATH.unshift(rakelib) unless $LOAD_PATH.include?(rakelib)
 
 require 'rubygems/package_task'
 require 'support/rake_constants'
+require 'support/rubygems_helper'
+
+include RubygemsHelper
 
 namespace :rubygems do
   Gem::PackageTask.new(FLAMEGRAPH_GEMSPEC).define
-
-  def gem_run *args
-    require "rubygems/gem_runner"
-    require "rubygems/exceptions"
-
-    Gem::GemRunner.new.run args
-  end
 
   desc "Install the build of the gem locally"
   task :install => [:package] do
@@ -33,4 +29,14 @@ namespace :rubygems do
 
   desc "Repackage, Uninstall and Install"
   task :reinstall => [:repackage, :uninstall, :install]
+
+  task :credentials do
+    write_gem_credentials
+  end
+
+  desc "Push #{FLAMEGRAPH_GEM_NAME} to rubygems.org"
+  task :push => [:credentials, :package] do
+    package = File.join "pkg", FLAMEGRAPH_GEM_NAME
+    gem_run "push", package
+  end
 end
