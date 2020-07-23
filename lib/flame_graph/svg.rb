@@ -158,8 +158,6 @@ module FlameGraph
     end
 
     def script
-      locals = [:nametype, :fontsize, :fontwidth, :xpad, :inverted, :searchcolor]
-
       [
         "<script type=\"text/ecmascript\">",
         "<![CDATA[",
@@ -370,11 +368,7 @@ module FlameGraph
       template_file = File.join template_dir, "#{template}.erb"
       template_data = File.read template_file
 
-      local_binding = binding.dup.tap do |_binding|
-                        locals.each { |var| _binding.local_variable_set var send(var) }
-                      end
-
-      ERB.new(template_data, nil, "-").result(local_binding)
+      ERB.new(template_data, nil, "-").result(binding)
     end
 
     # Make sure we don't have any SVG invalid characters
