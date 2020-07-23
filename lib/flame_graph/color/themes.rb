@@ -1,5 +1,3 @@
-require 'flame_graph/color'
-
 module FlameGraph
   class Color
     class Theme
