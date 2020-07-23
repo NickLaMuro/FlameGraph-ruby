@@ -99,7 +99,7 @@ module FlameGraph
         line.chomp!
 
         if config[:reverse] # reverse if needed
-          stack, samples1, samples2 = parse_line line
+          _, samples1, samples2 = parse_line line
           samples2.prepend " " if samples2
 
           @data << "#{data.split(';').reverse.join(';')} #{samples1}#{samples2}"
@@ -139,7 +139,7 @@ module FlameGraph
           stack   += ";--;"
 
           parts.each do |part|
-            part.gsub! /;/, "_[w];"
+            part.gsub! %r/;/, "_[w];"
             part += "_[w];"
             newparts.push part
           end
@@ -178,7 +178,7 @@ module FlameGraph
         if timemax / time > 0.02 # only warn is significant (e.g., not rounding etc)
           warn "Specified --total #{timemax} is less than actual total #{time}, so ignored\n"
         end
-        timemax = nil
+        self.timemax = nil
       end
       self.timemax ||= time
     end

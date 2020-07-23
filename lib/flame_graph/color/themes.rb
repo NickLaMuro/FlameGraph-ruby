@@ -1,5 +1,3 @@
-require 'flame_graph/color'
-
 module FlameGraph
   class Color
     class Theme
@@ -51,7 +49,7 @@ module FlameGraph
         mod    = 10
 
         # if module name present, trunc to 1st char
-        chars = name.sub /.(.*?)`/, ''
+        chars = name.sub %r/.(.*?)`/, ''
 
         chars.each_char do |c|
           vector += ((c.ord % mod).to_f / (mod - 1)) * weight
