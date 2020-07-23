@@ -139,7 +139,7 @@ module FlameGraph
           stack   += ";--;"
 
           parts.each do |part|
-            part.gsub! /;/, "_[w];"
+            part.gsub! %r/;/, "_[w];"
             part += "_[w];"
             newparts.push part
           end

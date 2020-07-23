@@ -297,7 +297,7 @@ module FlameGraph
     def escape text
       escaped = "" << text # dup
 
-      escaped.gsub! /_\[[kwij]\]$/, '' # strip any annotation
+      escaped.gsub! %r/_\[[kwij]\]$/, '' # strip any annotation
 
       escaped = yield escaped if block_given?
 
